@@ -1,5 +1,8 @@
 'use client';
+
+import axios from 'axios'
 import * as z from 'zod';
+import {useRouter} from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import {
@@ -32,6 +35,7 @@ const formSchema = z.object({
   imageUrl: z.string().min(1, { message: 'server image is required' }),
 });
 const InitialModal = () => {
+  const router=useRouter();
   const [isMounted, setIsMounted] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     defaultValues: {
@@ -42,7 +46,14 @@ const InitialModal = () => {
   });
   const isLoading = form.formState.isSubmitting;
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log(values);
+    try{
+      await axios.post('/api/servers',values);
+      form.reset();
+      router.refresh();
+      window.location.reload();
+    }catch(err) {
+      console.log(err);
+    }
   };
   useEffect(() => {
     setIsMounted(true);
