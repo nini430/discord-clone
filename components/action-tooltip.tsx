@@ -19,10 +19,10 @@ const ActionTooltip = ({
   align,
 }: ActionTooltipProps) => {
   return (
-    <TooltipProvider>
-      <Tooltip delayDuration={50}>
-        <TooltipTrigger asChild>{children}</TooltipTrigger>
-        <TooltipContent align={align} side={side}>
+    <TooltipProvider >
+      <Tooltip  delayDuration={50}>
+        <TooltipTrigger  asChild>{children}</TooltipTrigger>
+        <TooltipContent className='z-50' align={align} side={side}>
           <p className="font-semibold">{label}</p>
         </TooltipContent>
       </Tooltip>
