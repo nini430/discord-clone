@@ -31,7 +31,7 @@ const NavigationItem = ({ id, name, imageUrl }: NavigationItemProps) => {
           <div
             className={cn(
               'w-[48px] h-[48px] relative rounded-[24px] group-hover:rounded-[16px] transition-all group-hover:bg-neutral-500',
-              params.serverId === id && 'bg-zinc-500 rounded-[16px]'
+              params.serverId === id && 'rounded-[16px]'
             )}
           >
             <Image src={imageUrl} fill className="rounded-full" alt="server" />
