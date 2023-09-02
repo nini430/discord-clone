@@ -76,10 +76,10 @@ model Channel {
   type ChannelType @default(TEXT)
 
   profileId String
-  profile   Profile @relation(fields: [profileId], references: [id])
+  profile   Profile @relation(fields: [profileId], references: [id],onDelete: Cascade)
 
   serverId String
-  server   Server @relation(fields: [serverId], references: [id])
+  server   Server @relation(fields: [serverId], references: [id],onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
