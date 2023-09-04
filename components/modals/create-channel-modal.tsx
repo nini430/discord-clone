@@ -37,6 +37,7 @@ import { Input } from '@/components/ui/input';
 import { useForm } from 'react-hook-form';
 import useModalStore from '@/hooks/use-modal-store';
 import { ChannelType } from '@prisma/client';
+import { useEffect } from 'react';
 
 const formSchema = z.object({
   name: z
@@ -48,7 +49,8 @@ const formSchema = z.object({
   type: z.nativeEnum(ChannelType),
 });
 const CreateChannelModal = () => {
-  const { type, isOpen, onClose } = useModalStore();
+  const { type, isOpen, onClose, data } = useModalStore();
+  const { channelType } = data;
   const router = useRouter();
   const params = useParams();
   const form = useForm<z.infer<typeof formSchema>>({
@@ -60,6 +62,14 @@ const CreateChannelModal = () => {
   });
   const isModalOpen = isOpen && type === 'create-channel';
   const isLoading = form.formState.isSubmitting;
+
+  useEffect(()=>{
+    if(channelType) {
+      form.setValue('type',channelType);
+    }else{
+      form.setValue('type',ChannelType.TEXT);
+    }
+  },[form,channelType])
 
   const handleClose = () => {
     form.reset();
