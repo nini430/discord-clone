@@ -23,9 +23,12 @@ const ServerChannel = ({ channel, server, role }: ServerChannelProps) => {
   };
 
   const Icon = iconMap[channel.type];
-
+  const onClick=()=>{
+    router.push(`/servers/${params?.serverId}/channels/${channel?.id}`);
+  }
   return (
     <button
+      onClick={onClick}
       className={cn(
         'group px-2 py-2 rounded-md flex items-center gap-x-2 w-full hover:bg-zinc-700 transition',
         params?.channelId === channel.id ? 'bg-zinc-700' : ''
@@ -36,10 +39,10 @@ const ServerChannel = ({ channel, server, role }: ServerChannelProps) => {
       {channel.name !== 'general' && role !== MemberRole.GUEST && (
         <div className="ml-auto flex items-center gap-x-2">
           <ActionTooltip label="Edit" side="top">
-            <Edit onClick={()=>onOpen('edit-channel',{channel,server})} className="w-4 h-4 mr-2" />
+            <Edit onClick={(e)=>{e.stopPropagation();onOpen('edit-channel',{channel,server})}} className="w-4 h-4 mr-2" />
           </ActionTooltip>
           <ActionTooltip label="Delete" side="top">
-            <Trash onClick={()=>onOpen('delete-channel',{channel,server})}  className="w-4 h-4 mr-2" />
+            <Trash onClick={(e)=>{e.stopPropagation();onOpen('delete-channel',{channel,server})}}  className="w-4 h-4 mr-2" />
           </ActionTooltip>
         </div>
       )}
