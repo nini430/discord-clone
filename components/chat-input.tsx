@@ -9,6 +9,8 @@ import { Form, FormControl, FormField, FormItem } from './ui/form';
 import { Plus, Smile } from 'lucide-react';
 import { Input } from './ui/input';
 import useModalStore from '@/hooks/use-modal-store';
+import EmojiPicker from './emoji-picker';
+import { useRouter } from 'next/navigation';
 
 interface ChatInputProps {
   name: string;
@@ -22,7 +24,8 @@ const formSchema = z.object({
 });
 
 const ChatInput = ({ name, type, apiUrl, query }: ChatInputProps) => {
-  const {onOpen}=useModalStore();
+  const { onOpen } = useModalStore();
+  const router=useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     defaultValues: {
       content: '',
@@ -36,13 +39,15 @@ const ChatInput = ({ name, type, apiUrl, query }: ChatInputProps) => {
         query,
       });
       await axios.post(url, values);
+      form.reset();
+      router.refresh();
     } catch (err) {
       console.log(err);
     }
   };
   const isLoading = form.formState.isSubmitting;
   return (
-    <div className="pb-6">
+    <div className="">
       <Form {...form}>
         <form noValidate onSubmit={form.handleSubmit(onSubmit)}>
           <FormField
@@ -53,8 +58,9 @@ const ChatInput = ({ name, type, apiUrl, query }: ChatInputProps) => {
                 <FormControl>
                   <div className="relative">
                     <button
-                      onClick={()=>onOpen('message-file',{apiUrl,query})}
+                      onClick={() => onOpen('message-file', { apiUrl, query })}
                       disabled={isLoading}
+                      type='button'
                       className="flex items-center h-[24px] w-[24px] justify-center rounded-full  absolute top-4 left-5 bg-zinc-500"
                     >
                       <Plus />
@@ -65,14 +71,11 @@ const ChatInput = ({ name, type, apiUrl, query }: ChatInputProps) => {
                         type === 'conversation' ? name : `#${name}`
                       }`}
                       disabled={isLoading}
-                      className="px-14 py-9"
+                      className="px-14 py-8"
                     />
-                    <button
-                      disabled={isLoading}
-                      className="flex items-center justify-center bg-zinc-500 rounded-full absolute right-5 top-4"
-                    >
-                      <Smile />
-                    </button>
+                    <div className="absolute top-4 right-9">
+                      <EmojiPicker onChange={(emoji) =>field.onChange(`${field.value}${emoji}`)} />
+                    </div>
                   </div>
                 </FormControl>
               </FormItem>
