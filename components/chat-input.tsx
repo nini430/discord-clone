@@ -8,6 +8,7 @@ import { useForm } from 'react-hook-form';
 import { Form, FormControl, FormField, FormItem } from './ui/form';
 import { Plus, Smile } from 'lucide-react';
 import { Input } from './ui/input';
+import useModalStore from '@/hooks/use-modal-store';
 
 interface ChatInputProps {
   name: string;
@@ -21,6 +22,7 @@ const formSchema = z.object({
 });
 
 const ChatInput = ({ name, type, apiUrl, query }: ChatInputProps) => {
+  const {onOpen}=useModalStore();
   const form = useForm<z.infer<typeof formSchema>>({
     defaultValues: {
       content: '',
@@ -51,6 +53,7 @@ const ChatInput = ({ name, type, apiUrl, query }: ChatInputProps) => {
                 <FormControl>
                   <div className="relative">
                     <button
+                      onClick={()=>onOpen('message-file',{apiUrl,query})}
                       disabled={isLoading}
                       className="flex items-center h-[24px] w-[24px] justify-center rounded-full  absolute top-4 left-5 bg-zinc-500"
                     >
